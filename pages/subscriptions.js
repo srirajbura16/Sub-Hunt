@@ -1,5 +1,6 @@
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
+import ChannelLinks from "../Components/ChannelLinks";
 
 export default function Subscriptions() {
   const { isLoading, isError, data, error } = useQuery(
@@ -24,5 +25,16 @@ export default function Subscriptions() {
 
   console.log(data);
 
-  return <div>subscriptions</div>;
+  return (
+    <div>
+      {data.map(({ title, description, channelId }, i) => (
+        <ChannelLinks
+          key={channelId}
+          title={title}
+          description={description}
+          channelId={channelId}
+        />
+      ))}
+    </div>
+  );
 }

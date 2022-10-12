@@ -16,7 +16,17 @@ export default async function handler(req, res) {
     }
   );
 
-  const subscriptions = await data.json();
+  const response = await data.json();
 
-  res.status(200).json(subscriptions.items);
+  let subscriptions = [];
+  //
+  response.items.map((sub) => {
+    subscriptions.push({
+      title: sub.snippet.title,
+      description: sub.snippet.description,
+      channelId: sub.snippet.resourceId.channelId,
+    });
+  });
+  //
+  res.status(200).json(subscriptions);
 }
