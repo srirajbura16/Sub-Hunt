@@ -18,6 +18,8 @@ export default async function handler(req, res) {
 
   const response = await data.json();
 
+  console.log(response);
+
   let subscriptions = [];
   //
   response.items.map((sub) => {
@@ -27,6 +29,6 @@ export default async function handler(req, res) {
       channelId: sub.snippet.resourceId.channelId,
     });
   });
-  //
+
   res.status(200).json(subscriptions);
 }

@@ -12,7 +12,7 @@ export const authOptions = {
         url: "https://accounts.google.com/o/oauth2/v2/auth?prompt=consent&access_type=offline&response_type=code",
         params: {
           scope:
-            "openid profile email https://www.googleapis.com/auth/youtube.readonly",
+            "openid profile https://www.googleapis.com/auth/youtube.readonly",
         },
       },
     }),

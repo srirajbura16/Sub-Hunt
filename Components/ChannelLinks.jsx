@@ -34,10 +34,10 @@ export default function ChannelLinks({ title, description, channelId }) {
       <blockquote>{description}</blockquote>
       <ul>
         {data.length > 0
-          ? data.map((link) => (
-              <li>
+          ? data.map((link, i) => (
+              <li key={i}>
                 {link.title} -{" "}
-                <Link href={link.url}>
+                <Link href={link.url ? link.url : ""}>
                   <a>{link.url}</a>
                 </Link>
               </li>
