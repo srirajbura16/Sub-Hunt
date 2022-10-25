@@ -1,5 +1,5 @@
-import NextAuth from "next-auth";
-import GoogleProvider from "next-auth/providers/google";
+import NextAuth from 'next-auth';
+import GoogleProvider from 'next-auth/providers/google';
 
 export const authOptions = {
   // Configure one or more authentication providers
@@ -9,10 +9,10 @@ export const authOptions = {
       clientSecret: process.env.GOOGLE_SECRET,
 
       authorization: {
-        url: "https://accounts.google.com/o/oauth2/v2/auth?prompt=consent&access_type=offline&response_type=code",
+        url: 'https://accounts.google.com/o/oauth2/v2/auth?prompt=consent&access_type=offline&response_type=code',
         params: {
           scope:
-            "openid profile https://www.googleapis.com/auth/youtube.readonly",
+            'openid profile https://www.googleapis.com/auth/youtube.readonly',
         },
       },
     }),
@@ -21,6 +21,9 @@ export const authOptions = {
   secret: process.env.NEXTAUTH_SECRET,
 
   debug: true,
+  session: {
+    maxAge: 30 * 24 * 60 * 60,
+  },
 
   callbacks: {
     // async session({ session, token, user }) {

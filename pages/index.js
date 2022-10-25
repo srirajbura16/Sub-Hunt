@@ -17,10 +17,27 @@ export default function Component() {
 
   const submit = async (e) => {
     e.preventDefault();
-    searchText = e.target.searchText.value;
+    searchText = e.target.searchText.value.trim().toLowerCase();
     const response = await fetch('/api/getSubscriptions');
-    const subscriptions = await response.json();
-    console.log(subscriptions);
+    const data = await response.json();
+    console.log(data);
+    //filter array based on searchText.
+
+    const subscriptions = data.filter((sub) => {
+      //if sub.links contains serchText as subtext
+      //return sub
+
+      const metaLinksData = sub.links.map((link) => Object.values(link));
+      console.log(metaLinksData, 'mata links array');
+
+      return metaLinksData.some((values) => {
+        return values.some((value) => {
+          return value?.toLowerCase().includes(searchText);
+        });
+      });
+    });
+
+    console.log(subscriptions, 'SUBSCRIPTIONS');
     setSubscriptions(subscriptions);
   };
 
