@@ -21,24 +21,31 @@ export default function Component() {
     const response = await fetch("/api/getSubscriptions");
     const data = await response.json();
     console.log(data);
-    //filter array based on searchText.
 
-    const subscriptions = data.filter((sub) => {
-      //if sub.links contains serchText as subtext
-      //return sub
+    const subscriptionsWithReleventLinks = data.filter((sub) => {
+      let relevantLinksIndex = [];
+      sub.links.map((link, index) => {
+        //check searchtext in channel links
+        //populate relaventLinksIndex with exactly that
+        //return true
+        const searchTextExists =
+          link["url"]?.toLowerCase().includes(searchText) ||
+          link["title"]?.toLowerCase().includes(searchText);
 
-      const metaLinksData = sub.links.map((link) => Object.values(link));
-      console.log(metaLinksData, "mata links array");
-
-      return metaLinksData.some((values) => {
-        return values.some((value) => {
-          return value?.toLowerCase().includes(searchText);
-        });
+        if (searchTextExists) {
+          relevantLinksIndex.push(index);
+        }
       });
+      sub["relevantLinks"] = relevantLinksIndex;
+
+      if (relevantLinksIndex.length > 0) {
+        return true;
+      }
+      return false;
     });
 
-    console.log(subscriptions, "SUBSCRIPTIONS");
-    setSubscriptions(subscriptions);
+    console.log(subscriptionsWithReleventLinks, "SUBSCRIPTIONS RELEVENT LINKS");
+    setSubscriptions(subscriptionsWithReleventLinks);
   };
 
   return (
@@ -48,7 +55,6 @@ export default function Component() {
         <button onClick={() => signOut()}>Sign out</button>
       </div>
       <br />
-      
 
       <form onSubmit={submit}>
         <div className="mb-6">
@@ -73,16 +79,17 @@ export default function Component() {
         </button>
       </form>
 
-      {subscriptions ? (
+      {subscriptions.length > 0 ? (
         <div>
           {subscriptions.map((sub, i) => {
-            const { title, links } = sub;
+            const { title, links, relevantLinks } = sub;
+
             return (
               <div key={i}>
                 <div>{title}</div>
                 <ul>
-                  {links.map((link, ind) => {
-                    return <li key={ind}>{link.url}</li>;
+                  {relevantLinks.map((RL, i) => {
+                    return <li key={i}>{links[RL]["url"]}</li>;
                   })}
                 </ul>
               </div>
@@ -97,5 +104,5 @@ export default function Component() {
 }
 // on submit
 // get inputtext from input and get subscriptions links
-// search inputtext in links and filter array
-// rendern based on input links
+// filter subs based on serchText
+//sort links based on searchText inot relevant links array
