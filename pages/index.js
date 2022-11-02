@@ -1,26 +1,30 @@
 import { useSession, signIn, signOut } from "next-auth/react";
 import Link from "next/link";
 import { useState } from "react";
+import GoogleButton from "react-google-button";
 
 export default function Component() {
-  const [subscriptions, setSubscriptions] = useState([]);
+  const [subscriptions, setSubscriptions] = useState([]); //for caching
+  const [loading, setLoading] = useState(false);
   const { data: session } = useSession();
   let searchText;
 
-  if (!session) {
-    return (
-      <>
-        Not signed in <br />
-        <button onClick={() => signIn("google")}>Sign in with google</button>
-      </>
-    );
-  }
+  // if (!session) {
+  //   return (
+  //     <>
+  //       Not signed in <br />
+  //       <button onClick={() => signIn("google")}>Sign in with google</button>
+  //     </>
+  //   );
+  // }
 
   const submit = async (e) => {
+    setLoading(true);
     e.preventDefault();
     searchText = e.target.searchText.value.trim().toLowerCase();
     const response = await fetch("/api/getSubscriptions");
     const data = await response.json();
+
     console.log(data);
 
     const subscriptionsWithReleventLinks = data.filter((sub) => {
@@ -45,72 +49,106 @@ export default function Component() {
       return false;
     });
 
+    setLoading(false);
     console.log(subscriptionsWithReleventLinks, "SUBSCRIPTIONS RELEVENT LINKS");
     setSubscriptions(subscriptionsWithReleventLinks);
   };
 
   return (
-    <div className="mt-8 lg:w-3/5 md:w-4/5 w-full mx-auto">
-      <div>
-        <h1 class="sm:text-3xl text-2xl font-medium title-font mb-4 text-gray-900">
-          Hello {session.user.name}! let your search begin!
-        </h1>
-        {/* Signed in as {session.user.name} <br /> */}
-        <button onClick={() => signOut()}>Sign out</button>
-      </div>
-      <br />
-
-      <form onSubmit={submit}>
-        <div className="mb-2">
-          <input
-            type="text"
-            name="searchText"
-            placeholder="Type Keyword of other sites"
-            className="input input-bordered w-full mb-2 "
-            required
+    <div className="">
+      <div className="p-4 flex justify-end">
+        {!session ? (
+          <GoogleButton
+            onClick={() => {
+              signIn("google");
+            }}
+            type="dark"
           />
-          <button type="submit" className="btn btn-primary btn-block">
-            Search
+        ) : (
+          <button className="btn btn-error " onClick={() => signOut()}>
+            Sign out
           </button>
-        </div>
-      </form>
-
-      {subscriptions.length > 0 ? (
+        )}
+      </div>
+      <div className="mt-8 lg:w-3/5 md:w-4/5 p-4 w-full mx-auto">
         <div>
-          <button className="btn btn-info btn-block">
-            Open All Relevant Links in New Tabs
-          </button>
-          <div class="fflex flex-wrap -m-4 mt-6">
-            {subscriptions.map((sub, i) => {
-              const { title, links, relevantLinks } = sub;
-
-              return (
-                <div class="xl:w-1/3 md:w-1/2 p-4 flex flex-wrap" key={i}>
-                  <h2 class="text-lg text-gray-900 font-medium title-font mb-2">
-                    {title}
-                  </h2>
-
-                  <ul>
-                    {relevantLinks.map((RL, i) => {
-                      const renderLink = links[RL]["url"];
-                      const renderLinkTitle = links[RL]["title"];
-                      return (
-                        <li key={i}>
-                          <Link href={renderLink}>
-                            <a>{renderLink}</a>
-                          </Link>
-                        </li>
-                      );
-                    })}
-                  </ul>
-                </div>
-              );
-            })}
-          </div>
+          <h1 class="sm:text-3xl text-2xl font-medium title-font mb-4 text-gray-900">
+            {session
+              ? `Hello ${session.user.name}! let your search begin!`
+              : "Find YouTube Creators"}
+          </h1>
+          <p>
+            Here is a tool to find familer faces on other social media platforms
+            than YouTube. Simply search for a platform —or a keyword. Make sure
+            to allow permissions for reading your YouTube data when signing in.
+          </p>
         </div>
-      ) : (
-        ""
-      )}
+
+        <form onSubmit={submit} className="mt-4">
+          <div className="mb-2">
+            <input
+              type="text"
+              name="searchText"
+              placeholder="Type Keyword (twitter, github, etc)"
+              className="input input-bordered w-full min-w-3/5 mb-2 "
+              required
+            />{" "}
+            {session ? (
+              <button
+                type="submit"
+                className="btn btn-primary btn-block min-w-3/5"
+              >
+                Search
+              </button>
+            ) : (
+              <button
+                type="submit"
+                className="btn btn-primary btn-block min-w-3/5"
+                disabled
+              >
+                Sign In to search
+              </button>
+            )}
+          </div>
+        </form>
+
+        {loading ? "Loading..." : ""}
+        {subscriptions.length > 0 ? (
+          <div>
+            <div class="fflex flex-wrap -m-4 mt-6">
+              {subscriptions.map((sub, i) => {
+                const { title, links, relevantLinks } = sub;
+
+                return (
+                  <div class=" p-4 md:text-left text-center" key={i}>
+                    <h2 class="text-lg text-gray-900 font-medium title-font mb-2">
+                      {title}
+                    </h2>
+
+                    <ul>
+                      {relevantLinks.map((RL, i) => {
+                        const renderLink = links[RL]["url"];
+                        const renderLinkTitle = links[RL]["title"];
+                        return (
+                          <li key={i}>
+                            <Link href={renderLink}>
+                              <a class="mt-3 text-blue-700 hover:text-red-800 inline-flex items-center underline">
+                                {renderLink}
+                              </a>
+                            </Link>
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        ) : (
+          ""
+        )}
+      </div>
     </div>
   );
 }

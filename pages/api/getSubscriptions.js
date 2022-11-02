@@ -22,7 +22,6 @@ export default async function handler(req, res) {
 
   const response = await data.json();
   populateSubscriptions(response, userSubscriptions);
-  const { items, ...all } = response;
   // console.log(all);
 
   if (response.nextPageToken) {
