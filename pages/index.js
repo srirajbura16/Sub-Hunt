@@ -1,4 +1,5 @@
 import { useSession, signIn, signOut } from "next-auth/react";
+import Link from "next/link";
 import { useState } from "react";
 
 export default function Component() {
@@ -49,57 +50,68 @@ export default function Component() {
   };
 
   return (
-    <>
+    <div className="mt-8 lg:w-3/5 md:w-4/5 w-full mx-auto">
       <div>
-        Signed in as {session.user.name} <br />
+        <h1 class="sm:text-3xl text-2xl font-medium title-font mb-4 text-gray-900">
+          Hello {session.user.name}! let your search begin!
+        </h1>
+        {/* Signed in as {session.user.name} <br /> */}
         <button onClick={() => signOut()}>Sign out</button>
       </div>
       <br />
 
       <form onSubmit={submit}>
-        <div className="mb-6">
-          {/* <input
-            type="text"
-            name="searchText"
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            placeholder="twitter"
-            required
-          /> */}
+        <div className="mb-2">
           <input
             type="text"
             name="searchText"
             placeholder="Type Keyword of other sites"
-            className="input input-bordered w-full max-w-lg"
+            className="input input-bordered w-full mb-2 "
             required
           />
+          <button type="submit" className="btn btn-primary btn-block">
+            Search
+          </button>
         </div>
-
-        <button type="submit" className="btn btn-primary">
-          Search
-        </button>
       </form>
 
       {subscriptions.length > 0 ? (
         <div>
-          {subscriptions.map((sub, i) => {
-            const { title, links, relevantLinks } = sub;
+          <button className="btn btn-info btn-block">
+            Open All Relevant Links in New Tabs
+          </button>
+          <div class="fflex flex-wrap -m-4 mt-6">
+            {subscriptions.map((sub, i) => {
+              const { title, links, relevantLinks } = sub;
 
-            return (
-              <div key={i}>
-                <div>{title}</div>
-                <ul>
-                  {relevantLinks.map((RL, i) => {
-                    return <li key={i}>{links[RL]["url"]}</li>;
-                  })}
-                </ul>
-              </div>
-            );
-          })}
+              return (
+                <div class="xl:w-1/3 md:w-1/2 p-4 flex flex-wrap" key={i}>
+                  <h2 class="text-lg text-gray-900 font-medium title-font mb-2">
+                    {title}
+                  </h2>
+
+                  <ul>
+                    {relevantLinks.map((RL, i) => {
+                      const renderLink = links[RL]["url"];
+                      const renderLinkTitle = links[RL]["title"];
+                      return (
+                        <li key={i}>
+                          <Link href={renderLink}>
+                            <a>{renderLink}</a>
+                          </Link>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </div>
+              );
+            })}
+          </div>
         </div>
       ) : (
         ""
       )}
-    </>
+    </div>
   );
 }
 // on submit

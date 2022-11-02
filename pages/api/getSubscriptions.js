@@ -83,3 +83,7 @@ export default async function handler(req, res) {
 
 //figure out how many request we need to make OR use while loop to check nextPageToken on each request.
 // put initila and subsequent reqs in an array
+//
+
+//things: server side fetching vs client side fetchin?
+//browser cache.
