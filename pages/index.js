@@ -9,15 +9,6 @@ export default function Component() {
   const { data: session } = useSession();
   let searchText;
 
-  // if (!session) {
-  //   return (
-  //     <>
-  //       Not signed in <br />
-  //       <button onClick={() => signIn("google")}>Sign in with google</button>
-  //     </>
-  //   );
-  // }
-
   const submit = async (e) => {
     setLoading(true);
     e.preventDefault();
@@ -58,18 +49,28 @@ export default function Component() {
     <div className="">
       <div className="p-4 flex justify-end">
         {!session ? (
-          <GoogleButton
-            onClick={() => {
-              signIn("google");
-            }}
-            type="dark"
-          />
+          <div className="">
+            <GoogleButton
+              onClick={() => {
+                signIn("google");
+              }}
+              type="dark"
+            />
+          </div>
         ) : (
           <button className="btn btn-error " onClick={() => signOut()}>
             Sign out
           </button>
         )}
       </div>
+      {!session ? (
+        <p className="text-[12px] text-end pr-4">
+          Make sure to allow permissions for reading your YouTube data when
+          signing in.
+        </p>
+      ) : (
+        ""
+      )}
       <div className="mt-8 lg:w-3/5 md:w-4/5 p-4 w-full mx-auto">
         <div>
           <h1 class="sm:text-3xl text-2xl font-medium title-font mb-4 text-gray-900">
@@ -78,9 +79,9 @@ export default function Component() {
               : "Find YouTube Creators"}
           </h1>
           <p>
-            Here is a tool to find familer faces on other social media platforms
-            than YouTube. Simply search for a platform —or a keyword. Make sure
-            to allow permissions for reading your YouTube data when signing in.
+            Find your YouTube subscriptions(creators) on other platforms. Simply
+            search a keyword(e.g. twitter, github), and get back channels that
+            include the keyword in their about page links.
           </p>
         </div>
 

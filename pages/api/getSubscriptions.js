@@ -57,6 +57,8 @@ export default async function handler(req, res) {
     }
   }
 
+  // console.log(userSubscriptions, "USER SUB");
+
   const subscriptions = await Promise.all(
     userSubscriptions.map(async (sub) => {
       const { title, channelId } = sub;
@@ -66,7 +68,8 @@ export default async function handler(req, res) {
       );
 
       const response = await data.json();
-
+      console.log(response, "FROM THIRD PARTY!!");
+2
       return {
         title: title,
         links: response.items[0].about.links,
