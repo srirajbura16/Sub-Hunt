@@ -65,8 +65,11 @@ export default function Component() {
       </div>
       {!session ? (
         <p className="text-[12px] text-end pr-4">
-          Make sure to allow permissions for reading your YouTube data when
-          signing in.
+          When signing in, go to advanced {">"} Go to
+          find-youtube-creators.vercel.app (unsafe)
+          <br />
+          <br />
+          Make sure to allow permissions for reading your YouTube aswell
         </p>
       ) : (
         ""
