@@ -6,10 +6,13 @@ import GoogleButton from "react-google-button";
 export default function Component() {
   const [subscriptions, setSubscriptions] = useState([]); //for caching
   const [loading, setLoading] = useState(false);
+  const [resultError, setResultError] = useState(false);
   const { data: session } = useSession();
   let searchText;
 
   const submit = async (e) => {
+    setResultError(false);
+    setSubscriptions([]);
     setLoading(true);
     e.preventDefault();
     searchText = e.target.searchText.value.trim().toLowerCase();
@@ -43,6 +46,7 @@ export default function Component() {
     setLoading(false);
     console.log(subscriptionsWithReleventLinks, "SUBSCRIPTIONS RELEVENT LINKS");
     setSubscriptions(subscriptionsWithReleventLinks);
+    setResultError(true);
   };
 
   return (
@@ -117,6 +121,13 @@ export default function Component() {
         </form>
 
         {loading ? "Loading..." : ""}
+        {resultError && subscriptions.length === 0 ? (
+          <div className="text-center mt-8">
+            No results found. Try searching for popular sites.
+          </div>
+        ) : (
+          ""
+        )}
         {subscriptions.length > 0 ? (
           <div>
             <div class="fflex flex-wrap -m-4 mt-6">
