@@ -2,7 +2,7 @@
 
 Find your YouTube subscriptions(creators) on other platforms. Simply search a keyword(e.g. twitter, github), and get back channels that include the keyword in their about me links.
 
-![gif](/public/app_gif.webm)
+![Demo Gif](/public/app_gif.gif)
 
 ### Tech Stack
 
