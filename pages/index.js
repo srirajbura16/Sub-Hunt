@@ -80,16 +80,9 @@ export default function Component() {
       )}
       <div className="mt-8 lg:w-3/5 md:w-4/5 p-4 w-full mx-auto">
         <div>
-          <h1 class="sm:text-3xl text-2xl font-medium title-font mb-4 text-gray-900">
-            {session
-              ? `Hello ${session.user.name}! let your search begin!`
-              : "Find YouTube Creators"}
+          <h1 class="sm:text-3xl text-2xl font-medium title-font mb-4 ">
+            Sub Hunt
           </h1>
-          <p>
-            Find your YouTube subscriptions(creators) on other platforms. Simply
-            search a keyword(e.g. twitter, github), and get back channels that
-            include the keyword in their about page links.
-          </p>
         </div>
 
         <form onSubmit={submit} className="mt-4">
@@ -136,7 +129,7 @@ export default function Component() {
 
                 return (
                   <div class=" p-4 md:text-left text-center" key={i}>
-                    <h2 class="text-lg text-gray-900 font-medium title-font mb-2">
+                    <h2 class="text-lg  font-medium title-font mb-2">
                       {title}
                     </h2>
 
