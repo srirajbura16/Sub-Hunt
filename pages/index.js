@@ -115,9 +115,7 @@ export default function Component() {
 
         {loading ? "Loading..." : ""}
         {resultError && subscriptions.length === 0 ? (
-          <div className="text-center mt-8">
-            No results found. Try searching for popular sites.
-          </div>
+          <div className="text-center mt-8">No results found.</div>
         ) : (
           ""
         )}
