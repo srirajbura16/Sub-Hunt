@@ -70,7 +70,7 @@ export default function Component() {
       {!session ? (
         <p className="text-[12px] text-end pr-4">
           When signing in, go to advanced {">"} Go to
-          find-youtube-creators.vercel.app (unsafe)
+          find-youtube-creators.vercel.app
           <br />
           <br />
           Make sure to allow permissions for reading your YouTube aswell
